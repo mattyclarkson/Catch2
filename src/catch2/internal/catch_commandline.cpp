@@ -24,21 +24,14 @@ namespace Catch {
         using namespace Clara;
 
         auto const setWarning = [&]( std::string const& warning ) {
-                auto warningSet = [&]() {
-                    if( warning == "NoAssertions" )
-                        return WarnAbout::NoAssertions;
-
-                    if ( warning == "NoTests" )
-                        return WarnAbout::NoTests;
-
-                    return WarnAbout::Nothing;
-                }();
-
-                if (warningSet == WarnAbout::Nothing)
-                    return ParserResult::runtimeError( "Unrecognised warning: '" + warning + '\'' );
-                config.warnings = static_cast<WarnAbout::What>( config.warnings | warningSet );
+            if ( warning == "NoAssertions" ) {
+                config.warnings = WarnAbout::NoAssertions;
                 return ParserResult::ok( ParseResultType::Matched );
-            };
+            }
+
+            return ParserResult ::runtimeError(
+                "Unrecognised warning option: '" + warning + '\'' );
+        };
         auto const loadTestNamesFromFile = [&]( std::string const& filename ) {
                 std::ifstream f( filename.c_str() );
                 if( !f.is_open() )

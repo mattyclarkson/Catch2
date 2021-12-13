@@ -210,14 +210,12 @@ This option transforms tabs and newline characters into ```\t``` and ```\n``` re
 ## Warnings
 <pre>-w, --warn &lt;warning name></pre>
 
-Enables reporting of suspicious test states. There are currently two
-available warnings
+Enables reporting of suspicious test runs. There is currently only one
+available warning.
 
 ```
     NoAssertions   // Fail test case / leaf section if no assertions
                    // (e.g. `REQUIRE`) is encountered.
-    NoTests        // Return non-zero exit code when no test cases were run
-                   // Also calls reporter's noMatchingTestCases method
 ```
 
 

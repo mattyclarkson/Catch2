@@ -207,15 +207,21 @@ set_tests_properties(List::Reporters::XmlOutput PROPERTIES
 add_test(NAME NoAssertions COMMAND $<TARGET_FILE:SelfTest> -w NoAssertions "An empty test with no assertions")
 set_tests_properties(NoAssertions PROPERTIES PASS_REGULAR_EXPRESSION "No assertions in test case")
 
-add_test(NAME NoTest COMMAND $<TARGET_FILE:SelfTest> Tracker, "___nonexistent_test___")
-set_tests_properties(NoTest PROPERTIES
+add_test(NAME TestSpecs::CombiningMatchingAndNonMatchingIsOk COMMAND $<TARGET_FILE:SelfTest> Tracker, "___nonexistent_test___")
+set_tests_properties(TestSpecs::CombiningMatchingAndNonMatchingIsOk PROPERTIES
     PASS_REGULAR_EXPRESSION "No test cases matched '___nonexistent_test___'"
     FAIL_REGULAR_EXPRESSION "No tests ran"
 )
 
-add_test(NAME WarnAboutNoTests COMMAND ${CMAKE_COMMAND} -P ${SELF_TEST_DIR}/WarnAboutNoTests.cmake $<TARGET_FILE:SelfTest>)
+add_test(NAME TestSpecs::NoMatchedTestsFail
+  COMMAND $<TARGET_FILE:SelfTest> "___nonexistent_test___"
+)
+set_tests_properties(TestSpecs::NoMatchedTestsFail
+  PROPERTIES
+    WILL_FAIL ON
+)
 
-add_test(NAME UnmatchedOutputFilter COMMAND $<TARGET_FILE:SelfTest> [this-tag-does-not-exist] -w NoTests)
+add_test(NAME UnmatchedOutputFilter COMMAND $<TARGET_FILE:SelfTest> [this-tag-does-not-exist])
 set_tests_properties(UnmatchedOutputFilter
   PROPERTIES
     PASS_REGULAR_EXPRESSION "No test cases matched '\\[this-tag-does-not-exist\\]'"
